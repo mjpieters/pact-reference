@@ -9,8 +9,7 @@ use anyhow::{anyhow, Context};
 use clap::{App, AppSettings, Arg, ArgMatches, ErrorKind};
 use log::*;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
-use serde_yaml::Value as YamlValue;
+use serde_yaml::Value;
 
 use pact_cli::{glob_value, setup_loggers};
 use pact_models::http_utils;
@@ -168,15 +167,6 @@ fn handle_matches(args: &ArgMatches) -> Result<(), i32> {
     eprintln!("WARN: Could not setup loggers: {}", err);
     eprintln!();
   }
-  // println!("{:?}", args);
-  // let mut sources: Vec<(String, anyhow::Result<Value>)> = vec![];
-  // if let Some(values) = args.values_of("contentFile") {
-  //   sources.extend(
-  //     values
-  //       .map(|v| (v.to_string(), load_file(v)))
-  //       .collect::<Vec<(String, anyhow::Result<Value>)>>(),
-  //   );
-  // };
 
   let _files = load_files(args).map_err(|_| 1)?;
   let content_file = &_files[0];
