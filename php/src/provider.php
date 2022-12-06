@@ -11,7 +11,7 @@ $process->waitUntil(function ($type, $output) {
 });
 
 $code = file_get_contents(__DIR__ . '/../../rust/pact_ffi/include/pact.h');
-$ffi = FFI::cdef($code, __DIR__ . '/../../rust/target/debug/libpact_ffi.so');
+$ffi = FFI::cdef($code, __DIR__ . '/../../rust/target/debug/libpact_ffi.dylib');
 
 $ffi->pactffi_init('LOG_LEVEL');
 
@@ -34,12 +34,12 @@ function getCData(array $items): FFI\CData
 }
 
 $handle = $ffi->pactffi_verifier_new();
-$ffi->pactffi_verifier_set_provider_info($handle, 'http-provider', 'http', 'localhost', 8000, '/');
+$ffi->pactffi_verifier_set_provider_info($handle, 'not-http-provider', 'http', 'localhost', 8000, '/');
 $ffi->pactffi_verifier_set_filter_info($handle, '', 'book', false);
 $ffi->pactffi_verifier_set_provider_state($handle, 'http://localhost:8000/change-state', true, true);
 $ffi->pactffi_verifier_set_verification_options($handle, false, 5000);
 $ffi->pactffi_verifier_set_publish_options($handle, '1.0.0', null, getCData($tags), count($tags), 'some-branch');
-$ffi->pactffi_verifier_set_consumer_filters($handle, getCData($consumers), count($consumers));
+// $ffi->pactffi_verifier_set_consumer_filters($handle, getCData($consumers), count($consumers));
 $ffi->pactffi_verifier_add_directory_source($handle, __DIR__ . '/../pact');
 $result = $ffi->pactffi_verifier_execute($handle);
 $ffi->pactffi_verifier_shutdown($handle);
