@@ -29,13 +29,14 @@ async fn mock_server_passing_validation() {
     {
       // Define the Pact for the test, specify the names of the consuming
       // application and the provider application.
-      let alice_service = PactBuilder::new("Consumer", "Alice Service")
+      let alice_service = PactBuilder::new_v4("Consumer", "Alice Service")
         // Start a new interaction. We can add as many interactions as we want.
         .interaction("a retrieve Mallory request", "", |mut i| {
           // Defines a provider state. It is optional.
           i.given("there is some good mallory");
           // Define the request, a GET (default) request to '/mallory'.
           i.request.path("/mallory");
+          i.request.header("content-type", "application/json");
           // Define the response we want returned.
           i.response
             .ok()
@@ -49,7 +50,8 @@ async fn mock_server_passing_validation() {
 
       // You would use your actual client code here.
       let mallory_url = alice_service.path("/mallory");
-      let response = reqwest::get(mallory_url).await.expect("could not fetch URL");
+      let client = reqwest::Client::new();
+      let response = client.get(mallory_url).header("content-type", "application/json").send().await.expect("could not fetch URL");
       let body = response.text().await.expect("could not read response body");
       assert_eq!(body, "That is some good Mallory.");
     }
