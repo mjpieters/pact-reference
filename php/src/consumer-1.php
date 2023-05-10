@@ -5,7 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Symfony\Component\HttpClient\HttpClient;
 
 $code = file_get_contents(__DIR__ . '/../../rust/pact_ffi/include/pact.h');
-$ffi = FFI::cdef($code, __DIR__ . '/../../rust/target/debug/libpact_ffi.so');
+$ffi = FFI::cdef($code, __DIR__ . '/../../rust/target/debug/libpact_ffi.dylib');
 // Macs use dylib extension, following will assume os's downloaded in users home dir ~/.pact/ffi/arch/libpact_ffi.<dylib|so>
 // $code = file_get_contents(posix_getpwnam(get_current_user())['dir'] . '/.pact/ffi/pact.h');
 // $ffi = FFI::cdef($code, posix_getpwnam(get_current_user())['dir'] . '/.pact/ffi/osxaarch64/libpact_ffi.dylib');
@@ -45,6 +45,7 @@ $ffi->pactffi_with_body($interaction, $ffi->InteractionPart_Request, 'applicatio
   }');
 $ffi->pactffi_response_status($interaction, 201);
 $ffi->pactffi_with_header($interaction, $ffi->InteractionPart_Response, 'Content-Type', 0, 'application/ld+json; charset=utf-8');
+$ffi->pactffi_with_header($interaction, $ffi->InteractionPart_Request, 'testy-mc-header',0, 'some-header');
 $ffi->pactffi_with_body($interaction, $ffi->InteractionPart_Response, 'application/ld+json; charset=utf-8', '{
     "@context": "/api/contexts/Book",
     "@id": {
@@ -99,6 +100,9 @@ $response = $client->request(
     sprintf('http://localhost:%d/api/books', $port),
     [
         'json' => $json,
+        'headers' =>     [
+            'testy-mc-header' => 'some-header'
+        ]
     ]
 );
 

@@ -7,8 +7,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 $app = AppFactory::create();
+define('STDOUT', fopen('php://stdout', 'w'));
 
 $app->post('/api/books', function (Request $request, Response $response, $args) {
+    fwrite(STDOUT, print_r($request->getHeaders(), true));
     $response->getBody()->write(json_encode([
         '@context' => '/api/contexts/Book',
         '@id' => '/api/books/bb50b187-ff02-422c-886f-b58dc4e0adca',
@@ -26,6 +28,8 @@ $app->post('/api/books', function (Request $request, Response $response, $args) 
 });
 
 $app->put('/api/books/{id}/generate-cover', function (Request $request, Response $response, $args) {
+    fwrite(STDOUT, print_r($request->getHeaders(), true));
+
     $response->getBody()->write('[]');
 
     return $response->withStatus(204);

@@ -19,7 +19,8 @@
           "title": "The Handmaid's Tale"
         },
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "testy-mc-header": "some-header"
         },
         "matchingRules": {
           "body": {
@@ -137,9 +138,9 @@
   ],
   "metadata": {
     "pactRust": {
-      "ffi": "0.3.14",
-      "mockserver": "0.9.5",
-      "models": "1.0.0"
+      "ffi": "0.4.4",
+      "mockserver": "1.0.3",
+      "models": "1.0.13"
     },
     "pactSpecification": {
       "version": "3.0.0"
