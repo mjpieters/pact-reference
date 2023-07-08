@@ -46,7 +46,7 @@ async fn mock_server_passing_validation() -> anyhow::Result<()> {
           i.given("there is some good mallory");
           // Define the request, a GET (default) request to '/mallory'.
           i.request.path("/mallory");
-          i.request.header("content-type", "application/json");
+          i.request.header("accept", "application/problem+json, application/json, text/plain, */*");
           // Define the response we want returned.
           i.response
             .ok()
@@ -62,7 +62,7 @@ async fn mock_server_passing_validation() -> anyhow::Result<()> {
       let mallory_url = alice_service.path("/mallory");
       let client = reqwest::Client::new();
       let response = client.get(mallory_url)
-        .header("content-type", "application/json")
+        .header("accept", "application/problem+json, application/json, text/plain, */*")
         .send().await
         .expect("could not fetch URL");
       let body = response.text().await.expect("could not read response body");
