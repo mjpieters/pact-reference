@@ -44,7 +44,7 @@ linux_arm64_task:
   arm_container:
     image: python:$VERSION-slim
   install_script:
-    - apt update --yes && apt install --yes gcc make curl
+    - apt update --yes && apt install --yes gcc make curl libffi-dev
   << : *BUILD_TEST_TASK_TEMPLATE
 
 

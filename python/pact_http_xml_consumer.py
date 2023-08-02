@@ -103,7 +103,7 @@ def test_with_xml_requests(lib):
 
     lib.pactffi_cleanup_mock_server(mock_server_port)
     assert result == True
-    print(f"Client request - matched: {response.text}")
+    print(f"Client response matched expectations: {result}")
     # Check our response came back from the provider ok
 
     assert response.text != '' # This should always have a response
