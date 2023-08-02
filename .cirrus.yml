@@ -1,31 +1,65 @@
+# BUILD_TEST_TASK_TEMPLATE: &BUILD_TEST_TASK_TEMPLATE
+#   test_pact_mock_server_cli_script: |
+#     cd rust/pact_mock_server_cli
+#     cargo build --target ${BUILD_TARGET} --release
+#     ../target/${BUILD_TARGET}/release/pact_mock_server_cli --help
+#     rm -rf ../target/
+#   test_pact_verifier_cli_script: |
+#     cd rust/pact_verifier_cli
+#     cargo build --target ${BUILD_TARGET} --release
+#     ../target/${BUILD_TARGET}/release/pact_verifier_cli --help
+
+
+# linux_arm64_task: 
+#   arm_container:
+#     image: rustlang/rust:nightly
+#     cpu: 4
+#     memory: 12G
+#   env:
+#     BUILD_TARGET: aarch64-unknown-linux-gnu
+#   << : *BUILD_TEST_TASK_TEMPLATE
+
+# macosx_arm64_task: 
+#   macos_instance:
+#     image: ghcr.io/cirruslabs/macos-ventura-base:latest
+#   setup_script: brew install rust
+#   env:
+#     BUILD_TARGET: aarch64-apple-darwin 
+#   << : *BUILD_TEST_TASK_TEMPLATE
+
 BUILD_TEST_TASK_TEMPLATE: &BUILD_TEST_TASK_TEMPLATE
-  test_pact_mock_server_cli_script: |
-    cd rust/pact_mock_server_cli
-    cargo build --target ${BUILD_TARGET} --release
-    ../target/${BUILD_TARGET}/release/pact_mock_server_cli --help
-    rm -rf ../target/
-  test_pact_verifier_cli_script: |
-    cd rust/pact_verifier_cli
-    cargo build --target ${BUILD_TARGET} --release
-    ../target/${BUILD_TARGET}/release/pact_verifier_cli --help
+  arch_check_script:
+    - uname -am
+  test_script: |
+    cd python
+    make get_ffi
+    make deps
+    make run_xml_consumer
 
-
-linux_arm64_task: 
-  arm_container:
-    image: rustlang/rust:nightly
-    cpu: 4
-    memory: 12G
+linux_arm64_task:
+  only_if: $CIRRUS_CHANGE_TITLE !=~ 'ci\(gha\).*'
   env:
-    BUILD_TARGET: aarch64-unknown-linux-gnu
+    matrix:
+      - VERSION: 3.11
+  arm_container:
+    image: python:$VERSION-slim
+  install_script:
+    - apt update --yes && apt install --yes gcc make curl
   << : *BUILD_TEST_TASK_TEMPLATE
 
-macosx_arm64_task: 
+
+macos_arm64_task:
+  only_if: $CIRRUS_CHANGE_TITLE !=~ 'ci\(gha\).*'
   macos_instance:
     image: ghcr.io/cirruslabs/macos-ventura-base:latest
-  setup_script: brew install rust
   env:
-    BUILD_TARGET: aarch64-apple-darwin 
+    PATH: ${HOME}/.pyenv/shims:${PATH}
+    matrix:
+      - VERSION: 3.11
+  install_script:
+    - brew update    
+    - brew install pyenv protobuf # protobuf only needed if using grpc plugins
+    - pyenv install ${VERSION}
+    - pyenv global ${VERSION}
+    - pyenv rehash
   << : *BUILD_TEST_TASK_TEMPLATE
-
-
-

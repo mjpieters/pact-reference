@@ -1,9 +1,44 @@
+VERSION=0.4.7
+OS=$(shell uname -s)
+ARCH=$(shell uname -m)
 build_ffi:
 	cd ../rust/pact_ffi && \
 	cargo build && \
 	rustup run nightly cbindgen  \
 		--crate pact_ffi \
 		--output include/pact.h
+
+get_ffi:
+	curl -L -o pact.h https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-v${VERSION}/pact.h && \
+	case ${OS} in \
+		Darwin) \
+			case ${ARCH} in \
+				"aarch64"|"arm64") \
+					curl -L -o libpact_ffi.dylib.gz https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-v${VERSION}/libpact_ffi-osx-aarch64-apple-darwin.dylib.gz && \
+					gunzip -N -f libpact_ffi.dylib.gz;; \
+				*) \
+					curl -L -o libpact_ffi.dylib.gz https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-v${VERSION}/libpact_ffi-osx-x86_64.dylib.gz && \
+					gunzip -N -f libpact_ffi.dylib.gz;; \
+			esac;;\
+		Linux) \
+			case ${ARCH} in \
+				"aarch64"|"arm64") \
+					curl -L -o libpact_ffi.so.gz https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-v${VERSION}/libpact_ffi-linux-aarch64.so.gz && \
+					gunzip -N -f libpact_ffi.so.gz;; \
+				*) \
+					curl -L -o libpact_ffi.so.gz https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-v${VERSION}/libpact_ffi-linux-x86_64.so.gz && \
+					gunzip -N -f libpact_ffi.so.gz;; \
+			esac;;\
+		CYGWIN*|MINGW32*|MSYS*|MINGW*) \
+			case ${ARCH} in \
+				*) \
+					curl -L -o libpact_ffi.dll.gz https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-v${VERSION}/libpact_ffi-windows-x86_64.dll.gz && \
+					gunzip -N -f libpact_ffi.dll.gz;; \
+			esac;;\
+		*) \
+			echo "ERROR: ${OS} is not a supported operating system" && \
+			exit 1;;\
+	esac
 
 deps:
 	pip install -r requires.txt

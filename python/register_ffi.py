@@ -15,8 +15,10 @@ DIRECTIVES =[
             ]
 
 # Build with cargo build in pact_ffi crate
-FFI_HEADER_DIR='../rust/pact_ffi/include/'
-FFI_LIB_DIR='../rust/target/debug/'
+FFI_HEADER_DIR='./'
+FFI_LIB_DIR='./'
+# FFI_HEADER_DIR='../rust/pact_ffi/include/'
+# FFI_LIB_DIR='../rust/target/debug/'
 
 FFI_HEADER_PATH=f"{FFI_HEADER_DIR}pact.h"
 

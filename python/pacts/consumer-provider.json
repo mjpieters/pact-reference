@@ -18,7 +18,7 @@
         "path": "/projects"
       },
       "response": {
-        "body": "",
+        "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n        <projects>\n        <item>\n        <id>1</id>\n        <tasks>\n            <item>\n                <id>1</id>\n                <name>Do the laundry</name>\n                <done>true</done>\n            </item>\n            <item>\n                <id>2</id>\n                <name>Do the dishes</name>\n                <done>false</done>\n            </item>\n            <item>\n                <id>3</id>\n                <name>Do the backyard</name>\n                <done>false</done>\n            </item>\n            <item>\n                <id>4</id>\n                <name>Do nothing</name>\n                <done>false</done>\n            </item>\n        </tasks>\n        </item>\n        </projects>",
         "headers": {
           "Content-Type": "application/xml",
           "content-type": ", application/xml"
@@ -32,7 +32,7 @@
       "version": "1.0.0"
     },
     "pactRust": {
-      "ffi": "0.4.8",
+      "ffi": "0.4.7",
       "mockserver": "1.2.3",
       "models": "1.1.9"
     },

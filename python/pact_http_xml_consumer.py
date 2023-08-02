@@ -1,8 +1,6 @@
 import pytest
-from pact import PactV3
 import requests
-from matchersv3 import EachLike, Integer, Like, AtLeastOneLike
-# from pact.matchers_v3 import EachLike, Integer, Like, DateTime, AtLeastOneLike
+# from matchersv3 import EachLike, Integer, Like, AtLeastOneLike
 import xml.etree.ElementTree as ET
 from cffi import FFI
 from register_ffi import get_ffi_lib
