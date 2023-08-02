@@ -65,8 +65,17 @@ def test_with_xml_requests(lib):
     #   "Content-Type": "application/xml",
     #   "content-type": ", application/xml"
     # },
-    lib.pactffi_with_header_v2(interaction_handle, 1,b'Content-Type', 0, content_type.encode('ascii'))
-    lib.pactffi_with_header_v2(interaction_handle, 1,b'content-type', 1, content_type.encode('ascii'))
+    # lib.pactffi_with_header_v2(interaction_handle, 1,b'Content-Type', 0, content_type.encode('ascii'))
+    # lib.pactffi_with_header_v2(interaction_handle, 1,b'content-type', 1, content_type.encode('ascii'))
+
+
+    # Setting only either one of these will allow the mock_server to return XML, actually all the time
+    # however the header is encoded to the pact as "content-type": ", application/xml" due to using an index
+    # of 1. Setting it to 0 causes the test to fail
+    lib.pactffi_with_header(interaction_handle, 1,b'content-type', 1, content_type.encode('ascii'))
+    # lib.pactffi_with_header(interaction_handle, 1,b'Content-Type', 1, content_type.encode('ascii'))
+    
+    
     lib.pactffi_with_body(interaction_handle, 1, content_type.encode('ascii'), expected_response_body.encode('ascii'))
 
     mock_server_port = lib.pactffi_create_mock_server_for_transport(pact_handle, b'127.0.0.1', 0, b'http', b'{}')
