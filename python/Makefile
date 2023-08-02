@@ -23,6 +23,9 @@ run_pact_message_v3:
 run_pact_plugin_grpc_v4:
 	python pact_plugin_grpc_v4.py
 
+run_xml_consumer:
+	pytest pact_http_xml_consumer.py -rP 	
+
 test: deps run_pact_http run_pact_http_create_mock_server_for_pact run_pact_message_v3 run_pact_plugin_grpc_v4
 
 pacts_show:

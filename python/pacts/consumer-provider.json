@@ -1,0 +1,46 @@
+{
+  "consumer": {
+    "name": "consumer"
+  },
+  "interactions": [
+    {
+      "description": "a request for projects in XML",
+      "providerStates": [
+        {
+          "name": "i have a list of projects"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/xml"
+        },
+        "method": "GET",
+        "path": "/projects"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "Content-Type": "application/xml",
+          "content-type": ", application/xml"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-python": {
+      "version": "1.0.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.8",
+      "mockserver": "1.2.3",
+      "models": "1.1.9"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "provider"
+  }
+}
